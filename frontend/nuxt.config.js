@@ -33,9 +33,23 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
+
+  axios: {
+    proxy: true
+  },
+
+  proxy: {
+    '/': {
+      target: 'http://localhost:8080',
+      changeOrigin: true // cross origin 허용
+    }
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
+
 }
