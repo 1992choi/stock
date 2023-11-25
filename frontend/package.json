@@ -8,6 +8,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate"
   },
+  "type": "module",
   "dependencies": {
     "core-js": "^3.25.3",
     "nuxt": "^2.15.8",

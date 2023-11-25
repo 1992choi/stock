@@ -42,7 +42,7 @@ export default {
   },
 
   proxy: {
-    '/': {
+    '/api': {
       target: 'http://localhost:8080',
       changeOrigin: true // cross origin 허용
     }
@@ -50,6 +50,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    standalone: true
   }
 
 }
