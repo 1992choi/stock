@@ -21,4 +21,8 @@ public class StockService {
         return stockRepository.findById(stockId).orElseGet(Stock::new);
     }
 
+    public Stock save(Stock stock) {
+        return stockRepository.save(stock);
+    }
+
 }
