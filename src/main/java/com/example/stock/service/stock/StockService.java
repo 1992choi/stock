@@ -17,4 +17,8 @@ public class StockService {
         return stockRepository.findAll();
     }
 
+    public Stock findStock(Long stockId) {
+        return stockRepository.findById(stockId).orElseGet(Stock::new);
+    }
+
 }
