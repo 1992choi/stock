@@ -2,10 +2,12 @@ package com.example.stock.domain.stock;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 @Getter
+@ToString
 @Entity(name = "TB_STOCK")
 public class Stock {
 
