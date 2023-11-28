@@ -1,11 +1,9 @@
 package com.example.stock.domain.stock;
 
 import com.example.stock.domain.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
-
 
 @Entity(name = "TB_BOOKMARK")
 @Getter
@@ -19,8 +17,6 @@ public class Bookmark {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    @ToString.Exclude
-    @JsonIgnore
     private User user;
 
     @Column(name = "STOCK_ID")

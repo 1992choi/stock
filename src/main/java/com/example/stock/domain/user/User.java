@@ -28,7 +28,6 @@ public class User {
     private String userName;
 
     @OneToMany(mappedBy = "user")
-    @ToString.Exclude
     private List<Bookmark> bookmarks = new ArrayList<>();
 
 }
