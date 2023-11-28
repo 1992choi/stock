@@ -1,5 +1,6 @@
 package com.example.stock.controller.user;
 
+import com.example.stock.domain.stock.Bookmark;
 import com.example.stock.domain.user.User;
 import com.example.stock.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ public class UserController {
     @PostMapping("/api/users")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.saveUser(user));
+    }
+
+    @GetMapping("/api/users/{userId}/bookmarks")
+    public ResponseEntity<List<Bookmark>> findBookmarks(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.findBookmarks(userId));
     }
 
 }
