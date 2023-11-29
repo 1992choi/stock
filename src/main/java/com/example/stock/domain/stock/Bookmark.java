@@ -19,8 +19,9 @@ public class Bookmark {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @Column(name = "STOCK_ID")
-    private Long stockId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STOCK_ID")
+    private Stock stock;
 
     @Column(name = "ISSUED_FLAG")
     private String issuedFlag;

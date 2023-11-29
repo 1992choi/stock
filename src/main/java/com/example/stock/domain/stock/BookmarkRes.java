@@ -8,12 +8,12 @@ import lombok.Setter;
 public class BookmarkRes {
 
     private Long bookmarkId;
-    private Long stockId;
+    private StockRes stock;
     private String issuedFlag;
 
     public BookmarkRes(Bookmark bookmark) {
         this.bookmarkId = bookmark.getBookmarkId();
-        this.stockId = bookmark.getStockId();
+        this.stock = new StockRes(bookmark.getStock());
         this.issuedFlag = bookmark.getIssuedFlag();
     }
 
