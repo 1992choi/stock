@@ -1,6 +1,5 @@
 package com.example.stock.controller.user;
 
-import com.example.stock.domain.stock.Bookmark;
 import com.example.stock.domain.stock.BookmarkRes;
 import com.example.stock.domain.user.User;
 import com.example.stock.domain.user.UserRes;
