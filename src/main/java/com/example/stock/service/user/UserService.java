@@ -6,13 +6,14 @@ import com.example.stock.domain.user.User;
 import com.example.stock.domain.user.UserRes;
 import com.example.stock.repository.stock.BookmarkRepository;
 import com.example.stock.repository.user.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -30,6 +31,7 @@ public class UserService {
         return new UserRes(userRepository.findById(userId).orElseGet(User::new));
     }
 
+    @Transactional
     public UserRes saveUser(User user) {
         return new UserRes(userRepository.save(user));
     }
