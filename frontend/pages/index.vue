@@ -1,7 +1,9 @@
 <template>
   <div>
-    <NuxtLogo/>
-    <p>{{ msg }}</p>
+    <h2><NuxtLogo/> {{ title }}</h2>
+    <ul>
+      <li><nuxt-link to="/stock/list">공모주 목록</nuxt-link></li>
+    </ul>
   </div>
 </template>
 
@@ -11,18 +13,17 @@ import axios from "axios";
 export default {
   data() {
     return {
-      msg: {},
+      title: {},
     }
   },
   methods: {
-    async getMsg() {
+    async getTitle() {
       const response = await axios.get('http://localhost:8080/api/test/hello');
-      console.log(response.data)
-      this.msg = response.data;
+      this.title = response.data;
     }
   },
   created() {
-    this.getMsg();
+    this.getTitle();
   },
 }
 </script>
