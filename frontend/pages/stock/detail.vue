@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2><NuxtLogo/> 공모주 상세</h2>
+    <h2>공모주 상세</h2>
     <table>
       <tr>
         <th>공모주</th>

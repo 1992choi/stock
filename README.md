@@ -2,7 +2,7 @@
 
 ## 1. Nuxt
 ### 1.1. Nuxt 설치
-- ``$ npx create-nuxt-app <project-name>``
+- ``$ npx nuxi@latest init <project-name>``
 ### 1.2. Nuxt 실행
 - ``$ cd <project-name>``
 - ``$ npm run dev``
