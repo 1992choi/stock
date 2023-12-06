@@ -9,7 +9,7 @@
         <th>상장일</th>
       </tr>
       <tr v-for="stock in stocks" :key="stock.stockId">
-        <td><nuxt-link :to="{path: '/stock/detail2', query:{stockId:stock.stockId}}">{{ stock.stockName }}</nuxt-link></td>
+        <td><nuxt-link :to="{path: '/stock/detail', query:{stockId:stock.stockId}}">{{ stock.stockName }}</nuxt-link></td>
         <td @click="moveToDetailPage(stock.stockId)">{{ stock.stockName }}</td>
         <td>{{ stock.subscriptDate }}</td>
         <td>{{ stock.listingDate }}</td>
@@ -33,7 +33,7 @@ export default {
       this.stocks = response.data;
     },
     moveToDetailPage(id) {
-      this.$router.push(`detail/${id}`)
+      this.$router.push(`${id}`)
     }
   },
   created() {
