@@ -33,8 +33,7 @@ public class ScheduledTasks {
         }
     }
 
-    // @Scheduled(cron = "0 0 10 * * *")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 10 * * *")
     public void alertSubscript() {
         LocalDate today = LocalDate.now();
         List<UserRes> users = userService.findUsers();
@@ -47,8 +46,7 @@ public class ScheduledTasks {
         }
     }
 
-    // @Scheduled(cron = "0 50 8 * * *")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 50 8 * * *")
     public void alertListing() {
         LocalDate today = LocalDate.now();
         List<UserRes> users = userService.findUsers();
