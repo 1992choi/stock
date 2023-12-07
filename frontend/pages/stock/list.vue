@@ -15,6 +15,9 @@
         <td>{{ stock.listingDate }}</td>
       </tr>
     </table>
+    <div>
+      <button @click="moveToRegistPage()">공모주 추가</button>
+    </div>
   </div>
 </template>
 
@@ -34,6 +37,9 @@ export default {
     },
     moveToDetailPage(id) {
       this.$router.push(`${id}`)
+    },
+    moveToRegistPage() {
+      this.$router.push(`regist`)
     }
   },
   created() {
