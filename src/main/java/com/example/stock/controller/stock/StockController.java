@@ -1,6 +1,6 @@
 package com.example.stock.controller.stock;
 
-import com.example.stock.domain.stock.Stock;
+import com.example.stock.domain.stock.StockReq;
 import com.example.stock.domain.stock.StockRes;
 import com.example.stock.service.stock.StockService;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 public class StockController {
 
     private final StockService stockService;
@@ -26,8 +26,8 @@ public class StockController {
     }
 
     @PostMapping("/api/stocks")
-    public ResponseEntity<StockRes> saveStock(@RequestBody Stock stock) {
-        return ResponseEntity.ok(stockService.save(stock));
+    public ResponseEntity<StockRes> saveStock(@RequestBody StockReq stockReq) {
+        return ResponseEntity.ok(stockService.save(stockReq));
     }
 
 }

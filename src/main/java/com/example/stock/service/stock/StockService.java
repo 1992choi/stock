@@ -1,6 +1,7 @@
 package com.example.stock.service.stock;
 
 import com.example.stock.domain.stock.Stock;
+import com.example.stock.domain.stock.StockReq;
 import com.example.stock.domain.stock.StockRes;
 import com.example.stock.repository.stock.StockRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StockService {
 
     private final StockRepository stockRepository;
@@ -28,8 +29,8 @@ public class StockService {
     }
 
     @Transactional
-    public StockRes save(Stock stock) {
-        return new StockRes(stockRepository.save(stock));
+    public StockRes save(StockReq stockReq) {
+        return new StockRes(stockRepository.save(stockReq.toEntity()));
     }
 
 }
