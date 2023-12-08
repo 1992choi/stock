@@ -33,4 +33,9 @@ public class StockService {
         return new StockRes(stockRepository.save(stockReq.toEntity()));
     }
 
+    @Transactional
+    public void remove(Long stockId) {
+        stockRepository.deleteById(stockId);
+    }
+
 }

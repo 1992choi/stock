@@ -30,4 +30,10 @@ public class StockController {
         return ResponseEntity.ok(stockService.save(stockReq));
     }
 
+    @DeleteMapping("/api/stocks/{stockId}")
+    public ResponseEntity<Long> removeStock(@PathVariable Long stockId) {
+        stockService.remove(stockId);
+        return ResponseEntity.ok(stockId);
+    }
+
 }
