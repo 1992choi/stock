@@ -30,6 +30,11 @@ public class StockController {
         return ResponseEntity.ok(stockService.save(stockReq));
     }
 
+    @PutMapping("/api/stocks/{stockId}")
+    public ResponseEntity<StockRes> editStock(@PathVariable Long stockId, @RequestBody StockReq stockReq) {
+        return ResponseEntity.ok(stockService.edit(stockId, stockReq));
+    }
+
     @DeleteMapping("/api/stocks/{stockId}")
     public ResponseEntity<Long> removeStock(@PathVariable Long stockId) {
         stockService.remove(stockId);

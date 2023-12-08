@@ -34,6 +34,13 @@ public class StockService {
     }
 
     @Transactional
+    public StockRes edit(Long stockId, StockReq stockReq) {
+        Stock stock = stockRepository.findById(stockId).get();
+        stock.update(stockReq);
+        return new StockRes(stock);
+    }
+
+    @Transactional
     public void remove(Long stockId) {
         stockRepository.deleteById(stockId);
     }

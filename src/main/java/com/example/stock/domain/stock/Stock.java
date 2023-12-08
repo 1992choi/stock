@@ -35,4 +35,16 @@ public class Stock {
         this.listingDate = listingDate;
     }
 
+    public void update(StockReq stockReq) {
+        if (!(stockReq.getStockName() == null || "".equals(stockReq.getStockName()))) {
+            this.stockName = stockReq.getStockName();
+        }
+        if (stockReq.getSubscriptDate() != null) {
+            this.subscriptDate = stockReq.getSubscriptDate();
+        }
+        if (stockReq.getListingDate() != null) {
+            this.listingDate = stockReq.getListingDate();
+        }
+    }
+
 }
