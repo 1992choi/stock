@@ -5,19 +5,22 @@
       <tr>
         <th>공모주</th>
         <td>
-          <input type="text" v-model="stockName"/>
+<!--          <input type="text" v-model="stockName"/>-->
+          <input type="text" v-model="stock.stockName"/>
         </td>
       </tr>
       <tr>
         <th>공모일</th>
         <td>
-          <input type="text" v-model="subscriptDate"/>
+<!--          <input type="text" v-model="subscriptDate"/>-->
+          <input type="text" v-model="stock.subscriptDate"/>
         </td>
       </tr>
       <tr>
         <th>상장일</th>
         <td>
-          <input type="text" v-model="listingDate"/>
+<!--          <input type="text" v-model="listingDate"/>-->
+          <input type="text" v-model="stock.listingDate"/>
         </td>
       </tr>
     </table>
@@ -34,26 +37,31 @@ import axios from "axios";
 export default {
   data() {
     return {
-      stockId: '',
-      stockName: '',
-      subscriptDate: '',
-      listingDate: ''
+      // stockId: '',
+      // stockName: '',
+      // subscriptDate: '',
+      // listingDate: ''
+      stock: {}
     }
   },
   methods: {
     async getStock() {
       const stockId = this.$route.query.stockId;
       const response = await axios.get('http://localhost:8080/api/stocks/' + stockId);
-      this.stockName = response.data.stockName;
-      this.subscriptDate = response.data.subscriptDate;
-      this.listingDate = response.data.listingDate;
+      // this.stockName = response.data.stockName;
+      // this.subscriptDate = response.data.subscriptDate;
+      // this.listingDate = response.data.listingDate;
+      this.stock = response.data;
     },
     async edit() {
       const stockId = this.$route.query.stockId;
       await axios.put('http://localhost:8080/api/stocks/' + stockId, {
-        stockName: this.stockName,
-        subscriptDate: this.subscriptDate,
-        listingDate: this.listingDate
+        // stockName: this.stockName,
+        // subscriptDate: this.subscriptDate,
+        // listingDate: this.listingDate
+        stockName: this.stock.stockName,
+        subscriptDate: this.stock.subscriptDate,
+        listingDate: this.stock.listingDate
       }).then((response) => {
         if (response.status === 200) {
           alert("수정 성공");
