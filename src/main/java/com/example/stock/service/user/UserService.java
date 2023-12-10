@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -28,7 +29,7 @@ public class UserService {
     }
 
     public UserRes findUser(Long userId) {
-        return new UserRes(userRepository.findById(userId).orElseGet(User::new));
+        return new UserRes(userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("사용자가 없습니다.")));
     }
 
     @Transactional
@@ -37,7 +38,7 @@ public class UserService {
     }
 
     public List<BookmarkRes> findBookmarks(Long userId) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
         List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(user);
 
         return bookmarks.stream()

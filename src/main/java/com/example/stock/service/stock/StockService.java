@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +26,7 @@ public class StockService {
     }
 
     public StockRes findStock(Long stockId) {
-        return new StockRes(stockRepository.findById(stockId).orElseGet(Stock::new));
+        return new StockRes(stockRepository.findById(stockId).orElseThrow(() -> new NoSuchElementException("공모주가 없습니다.")));
     }
 
     @Transactional
@@ -35,7 +36,7 @@ public class StockService {
 
     @Transactional
     public StockRes edit(Long stockId, StockReq stockReq) {
-        Stock stock = stockRepository.findById(stockId).get();
+        Stock stock = stockRepository.findById(stockId).orElseThrow(() -> new NoSuchElementException("공모주가 없습니다."));
         stock.update(stockReq);
         return new StockRes(stock);
     }
