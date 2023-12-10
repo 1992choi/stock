@@ -29,3 +29,6 @@
     }
   },
   ``` 
+### 1.5. Bootstrap 이슈
+- ``$ npm install -D sass``
+
