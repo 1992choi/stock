@@ -33,7 +33,7 @@ export default {
   methods: {
     async getStocks() {
       const response = await axios.get('http://localhost:8080/api/stocks');
-      this.stocks = response.data;
+      this.stocks = response.data.data;
     },
     moveToDetailPage(id) {
       this.$router.push(`${id}`)

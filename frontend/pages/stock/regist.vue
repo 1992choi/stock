@@ -41,9 +41,11 @@ async function regist() {
     subscriptDate: subscriptDate.value,
     listingDate: listingDate.value
   }).then((response) => {
-    if (response.status === 200) {
+    if (response.data.status == 'success') {
       alert("추가 성공");
       location.href = 'list'
+    } else {
+      alert(response.data.message);
     }
   }).catch((error) => {
     console.log(error.response)

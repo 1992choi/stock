@@ -1,39 +1,36 @@
 package com.example.stock.controller.user;
 
-import com.example.stock.domain.stock.BookmarkRes;
+import com.example.stock.domain.common.CommonRes;
 import com.example.stock.domain.user.User;
-import com.example.stock.domain.user.UserRes;
 import com.example.stock.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     @GetMapping("/api/users")
-    public ResponseEntity<List<UserRes>> findUsers() {
-        return ResponseEntity.ok(userService.findUsers());
+    public ResponseEntity<CommonRes> findUsers() {
+        return ResponseEntity.ok(CommonRes.successRes(userService.findUsers()));
     }
 
     @GetMapping("/api/users/{userId}")
-    public ResponseEntity<UserRes> findUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.findUser(userId));
+    public ResponseEntity<CommonRes> findUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(CommonRes.successRes(userService.findUser(userId)));
     }
 
     @PostMapping("/api/users")
-    public ResponseEntity<UserRes> saveUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.saveUser(user));
+    public ResponseEntity<CommonRes> saveUser(@RequestBody User user) {
+        return ResponseEntity.ok(CommonRes.successRes(userService.saveUser(user)));
     }
 
     @GetMapping("/api/users/{userId}/bookmarks")
-    public ResponseEntity<List<BookmarkRes>> findBookmarks(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.findBookmarks(userId));
+    public ResponseEntity<CommonRes> findBookmarks(@PathVariable Long userId) {
+        return ResponseEntity.ok(CommonRes.successRes(userService.findBookmarks(userId)));
     }
 
 }

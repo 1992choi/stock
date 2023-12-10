@@ -31,7 +31,7 @@ export default {
     async getStock() {
       const stockId = this.$route.params.id
       const response = await axios.get('http://localhost:8080/api/stocks/' + stockId)
-      this.stock = response.data
+      this.stock = response.data.data
     }
   },
   created() {

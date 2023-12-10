@@ -51,7 +51,7 @@ export default {
       // this.stockName = response.data.stockName;
       // this.subscriptDate = response.data.subscriptDate;
       // this.listingDate = response.data.listingDate;
-      this.stock = response.data;
+      this.stock = response.data.data;
     },
     async edit() {
       const stockId = this.$route.query.stockId;
@@ -64,8 +64,12 @@ export default {
         listingDate: this.stock.listingDate
       }).then((response) => {
         if (response.status === 200) {
-          alert("수정 성공");
-          location.href = 'list'
+          if (response.data.status == 'success') {
+            alert("수정 성공");
+            location.href = 'list'
+          } else {
+            alert(response.data.message);
+          }
         }
       }).catch((error) => {
         console.log(error.response)
@@ -77,8 +81,12 @@ export default {
       await axios.delete('http://localhost:8080/api/stocks/' + stockId)
           .then((response) => {
             if (response.status === 200) {
-              alert("삭제 성공");
-              location.href = 'list'
+              if (response.data.status == 'success') {
+                alert("삭제 성공");
+                location.href = 'list'
+              } else {
+                alert(response.data.message);
+              }
             }
           }).catch((error) => {
             console.log(error.response)
