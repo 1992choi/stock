@@ -11,16 +11,16 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="index.html" class="menu-link">
+              <a class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <nuxt-link to="/">Dashboard</nuxt-link>
               </a>
             </li>
 
             <li class="menu-item">
-              <a href="index.html" class="menu-link">
+              <a class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <nuxt-link to="/stock/list">공모주 목록</nuxt-link>
+                <nuxt-link to="/stock/list">공모주</nuxt-link>
               </a>
             </li>
           </ul>
@@ -56,7 +56,7 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">John Doe</span>
+                            <span class="fw-semibold d-block">CHOI</span>
                             <small class="text-muted">Admin</small>
                           </div>
                         </div>
