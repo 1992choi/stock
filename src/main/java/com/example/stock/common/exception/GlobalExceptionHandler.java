@@ -12,7 +12,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     protected ResponseEntity<CommonRes> handleNoSuchElementFoundException(NoSuchElementException e) {
-        return ResponseEntity.ok(CommonRes.errorRes(e.getMessage()));
+        return ResponseEntity.ok(CommonRes.failRes(e.getMessage()));
     }
 
 }
