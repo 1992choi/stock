@@ -2,6 +2,7 @@ package com.example.stock.controller.user;
 
 import com.example.stock.domain.common.CommonRes;
 import com.example.stock.domain.user.User;
+import com.example.stock.domain.user.UserReq;
 import com.example.stock.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+
+    @PostMapping("/api/login")
+    public ResponseEntity<CommonRes> login(@RequestBody UserReq userReq) {
+        return ResponseEntity.ok(CommonRes.successRes(userService.login(userReq)));
+    }
 
     @GetMapping("/api/users")
     public ResponseEntity<CommonRes> findUsers() {

@@ -3,6 +3,7 @@ package com.example.stock.service.user;
 import com.example.stock.domain.stock.Bookmark;
 import com.example.stock.domain.stock.BookmarkRes;
 import com.example.stock.domain.user.User;
+import com.example.stock.domain.user.UserReq;
 import com.example.stock.domain.user.UserRes;
 import com.example.stock.repository.stock.BookmarkRepository;
 import com.example.stock.repository.user.UserRepository;
@@ -21,6 +22,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BookmarkRepository bookmarkRepository;
+
+    public UserRes login(UserReq userReq) {
+        User user = userRepository.findByUserEmail(userReq.getUserEmail()).orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
+        if (!user.getUserPassword().equals(userReq.getUserPassword())) {
+            new NoSuchElementException("사용자가 없습니다.");
+        }
+
+        return new UserRes(user);
+    }
 
     public List<UserRes> findUsers() {
         return userRepository.findAll().stream()
