@@ -32,6 +32,9 @@
 ### 1.5. Bootstrap 이슈
 - ``$ npm install -D sass``
 
+### 1.6. Pinia 설치
+- ``$ npm install pinia @pinia/nuxt``
+
 ## 2. Swagger
 ### 2.1. URL
 - http://localhost:8080/swagger-ui/index.html

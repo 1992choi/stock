@@ -2,7 +2,6 @@
   <div class="container-sm w-50 mt-5">
     <div class="authentication-wrapper authentication-basic container-p-y">
       <div class="authentication-inner">
-        <!-- Register -->
         <div class="card">
           <div class="card-body">
             <div class="app-brand justify-content-center">
@@ -33,7 +32,6 @@
             </p>
           </div>
         </div>
-        <!-- /Register -->
       </div>
     </div>
   </div>
@@ -42,6 +40,7 @@
 <script setup>
   import {ref} from "@vue/reactivity";
   import axios from "axios";
+  import { useAuthStore } from '~/stores/auth'
 
   definePageMeta({
     layout: false
@@ -49,6 +48,7 @@
 
   const userEmail = ref('')
   const userPassword = ref('')
+  const authStore = useAuthStore()
 
   async function login() {
   await axios.post('http://localhost:8080/api/login', {
@@ -56,7 +56,11 @@
     userPassword: userPassword.value
   }).then((response) => {
     if (response.data.status == 'success') {
-      alert("로그인 성공");
+      const user = {
+        email: response.data.data.userEmail,
+        name: response.data.data.userName
+      }
+      authStore.setUser(user)
       location.href = 'main'
     } else {
       alert(response.data.message);
