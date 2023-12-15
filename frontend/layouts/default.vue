@@ -56,7 +56,7 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">CHOI</span>
+                            <span class="fw-semibold d-block">{{ user.name }}</span>
                             <small class="text-muted">Admin</small>
                           </div>
                         </div>
@@ -129,20 +129,27 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import { useAuthStore } from '~/stores/auth'
 
-export default {
-  methods: {
-    showArea(tagId) {
-      const tag = document.getElementById(tagId);
-      if (tag.style.display != 'block') {
-        tag.style.display = 'block'
-      } else {
-        tag.style.display = 'none'
-      }
-    }
-  }
-}
+export default defineComponent({
+    methods: {
+        showArea(tagId) {
+            const tag = document.getElementById(tagId);
+            if (tag.style.display != 'block') {
+                tag.style.display = 'block'
+            } else {
+                tag.style.display = 'none'
+            }
+        }
+    },
+    setup() {
+        const store = useAuthStore()
+        const { user } = store
+        return {
+            user
+        }
+    },
+})
 </script>
 <style scoped>
   .footer {

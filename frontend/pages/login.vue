@@ -49,6 +49,7 @@
   const userEmail = ref('')
   const userPassword = ref('')
   const authStore = useAuthStore()
+  const router = useRouter();
 
   async function login() {
   await axios.post('http://localhost:8080/api/login', {
@@ -60,8 +61,8 @@
         email: response.data.data.userEmail,
         name: response.data.data.userName
       }
-      authStore.setUser(user)
-      location.href = 'main'
+      authStore.setUser(user);
+      router.push('/main');
     } else {
       alert(response.data.message);
     }
