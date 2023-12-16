@@ -11,4 +11,14 @@ public class UserReq {
 
     private String userPassword;
 
+    private String userName;
+
+    public User toEntity() {
+        return User.builder()
+                .userEmail(this.userEmail)
+                .userPassword(this.userPassword)
+                .userName(this.userName)
+                .build();
+    }
+
 }

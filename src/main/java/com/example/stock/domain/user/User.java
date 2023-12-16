@@ -2,15 +2,19 @@ package com.example.stock.domain.user;
 
 import com.example.stock.domain.stock.Bookmark;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "TB_USER")
+
 @Getter
 @ToString
+@NoArgsConstructor
+@Entity(name = "TB_USER")
 public class User {
 
     @Id
@@ -29,5 +33,12 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Bookmark> bookmarks = new ArrayList<>();
+
+    @Builder
+    public User(String userEmail, String userPassword, String userName) {
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userName = userName;
+    }
 
 }

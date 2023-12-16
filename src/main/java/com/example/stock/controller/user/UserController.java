@@ -1,7 +1,6 @@
 package com.example.stock.controller.user;
 
 import com.example.stock.domain.common.CommonRes;
-import com.example.stock.domain.user.User;
 import com.example.stock.domain.user.UserReq;
 import com.example.stock.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,8 @@ public class UserController {
     }
 
     @PostMapping("/api/users")
-    public ResponseEntity<CommonRes> saveUser(@RequestBody User user) {
-        return ResponseEntity.ok(CommonRes.successRes(userService.saveUser(user)));
+    public ResponseEntity<CommonRes> saveUser(@RequestBody UserReq userReq) {
+        return ResponseEntity.ok(CommonRes.successRes(userService.saveUser(userReq)));
     }
 
     @GetMapping("/api/users/{userId}/bookmarks")

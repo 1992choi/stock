@@ -43,8 +43,8 @@ public class UserService {
     }
 
     @Transactional
-    public UserRes saveUser(User user) {
-        return new UserRes(userRepository.save(user));
+    public UserRes saveUser(UserReq userReq) {
+        return new UserRes(userRepository.save(userReq.toEntity()));
     }
 
     public List<BookmarkRes> findBookmarks(Long userId) {

@@ -28,7 +28,7 @@
               </div>
             </form>
             <p class="text-center">
-              <a href=""><span>Sign up</span></a>
+              <nuxt-link to="/signup">Sign up</nuxt-link>
             </p>
           </div>
         </div>
@@ -52,23 +52,23 @@
   const router = useRouter();
 
   async function login() {
-  await axios.post('http://localhost:8080/api/login', {
-    userEmail: userEmail.value,
-    userPassword: userPassword.value
-  }).then((response) => {
-    if (response.data.status == 'success') {
-      const user = {
-        email: response.data.data.userEmail,
-        name: response.data.data.userName
+    await axios.post('http://localhost:8080/api/login', {
+      userEmail: userEmail.value,
+      userPassword: userPassword.value
+    }).then((response) => {
+      if (response.data.status == 'success') {
+        const user = {
+          email: response.data.data.userEmail,
+          name: response.data.data.userName
+        }
+        authStore.setUser(user);
+        router.push('/main');
+      } else {
+        alert(response.data.message);
       }
-      authStore.setUser(user);
-      router.push('/main');
-    } else {
-      alert(response.data.message);
-    }
-  }).catch((error) => {
-    console.log(error.response)
-    alert("로그인 실패");
-  });
-}
+    }).catch((error) => {
+      console.log(error.response)
+      alert("로그인 실패");
+    });
+  }
 </script>
