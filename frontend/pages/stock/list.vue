@@ -34,36 +34,22 @@
 </template>
 
 <script>
-import {ref} from 'vue';
-import {useRouter} from 'vue-router'
-import axios from 'axios';
+import { stockFn } from '~/composables/stockFn'
 
 export default {
   setup(props, context) {
-    // data
-    const stocks = ref('');
-    const router = useRouter();
-
-    // methods
-    function getStocks() {
-      axios.get('http://localhost:8080/api/stocks').then((result) => {
-        stocks.value = result.data.data;
-      });
-    }
-
-    function moveToDetailPage(id) {
-      router.push(`${id}`)
-    }
-
-    function moveToRegistPage() {
-      router.push(`regist`)
-    }
+    const {
+      stocks,
+      getStocks,
+      moveToDetailPage,
+      moveToRegistPage
+    } = stockFn();
 
     onMounted(() => {
       getStocks();
     })
 
-    return {stocks, moveToDetailPage, moveToRegistPage}
+    return { stocks, moveToDetailPage, moveToRegistPage }
   }
 }
 </script>
