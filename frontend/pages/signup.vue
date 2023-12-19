@@ -44,6 +44,7 @@ definePageMeta({
 const userEmail = ref('')
 const userName = ref('')
 const userPassword = ref('')
+const router = useRouter();
 
 async function signUp() {
   await axios.post('http://localhost:8080/api/users', {
@@ -53,7 +54,7 @@ async function signUp() {
   }).then((response) => {
     if (response.data.status == 'success') {
       alert('회원가입 성공');
-      location.href = 'login'
+      router.push('/login');
     } else {
       alert(response.data.message);
     }

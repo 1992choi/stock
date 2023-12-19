@@ -41,6 +41,8 @@
 <script>
 import axios from "axios";
 
+const router = useRouter();
+
 export default {
   data() {
     return {
@@ -73,7 +75,7 @@ export default {
         if (response.status === 200) {
           if (response.data.status == 'success') {
             alert("수정 성공");
-            location.href = 'list'
+            router.push('/stock/list');
           } else {
             alert(response.data.message);
           }
@@ -90,7 +92,7 @@ export default {
             if (response.status === 200) {
               if (response.data.status == 'success') {
                 alert("삭제 성공");
-                location.href = 'list'
+                router.push('/stock/list');
               } else {
                 alert(response.data.message);
               }

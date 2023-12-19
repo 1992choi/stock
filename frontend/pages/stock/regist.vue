@@ -41,6 +41,7 @@ import axios from "axios";
 const stockName = ref('')
 const subscriptDate = ref('')
 const listingDate = ref('')
+const router = useRouter();
 
 async function regist() {
   await axios.post('http://localhost:8080/api/stocks', {
@@ -50,7 +51,7 @@ async function regist() {
   }).then((response) => {
     if (response.data.status == 'success') {
       alert("추가 성공");
-      location.href = 'list'
+      router.push('/stock/list');
     } else {
       alert(response.data.message);
     }
