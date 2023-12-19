@@ -34,6 +34,7 @@
 
 ### 1.6. Pinia 설치
 - ``$ npm install pinia @pinia/nuxt``
+- ``$ npm i -D @pinia-plugin-persistedstate/nuxt``
 
 ## 2. Swagger
 ### 2.1. URL

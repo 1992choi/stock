@@ -1,3 +1,5 @@
+import { defineStore } from 'pinia'
+
 interface IUser {
     email: string
     name: string
@@ -12,6 +14,7 @@ export const useAuthStore = defineStore('auth', {
             } as IUser
         }
     },
+    persist: true,
     getters: {
         getEmail: (state): string => state.user.email,
         getName: (state): string => state.user.name
