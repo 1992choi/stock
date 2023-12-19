@@ -5,7 +5,7 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
     ],
     imports: {
-        dirs: ['./store']
+        dirs: ['./stores']
     },
     css: [
         `../assets/vendor/fonts/boxicons.css`,
