@@ -8,9 +8,14 @@ import com.example.stock.domain.user.UserRes;
 import com.example.stock.repository.stock.BookmarkRepository;
 import com.example.stock.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -18,7 +23,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final BookmarkRepository bookmarkRepository;
@@ -54,6 +59,17 @@ public class UserService {
         return bookmarks.stream()
                 .map(BookmarkRes::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUserEmail(),
+                user.getUserPassword(),
+                Arrays.asList("ADMIN").stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()) // todo. 권한처리
+        );
     }
 
 }

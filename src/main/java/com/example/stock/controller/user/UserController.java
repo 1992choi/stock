@@ -1,9 +1,12 @@
 package com.example.stock.controller.user;
 
+import com.example.stock.common.jwt.TokenProvider;
 import com.example.stock.domain.common.CommonRes;
 import com.example.stock.domain.user.UserReq;
+import com.example.stock.domain.user.UserRes;
 import com.example.stock.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.Token;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
+    private final TokenProvider tokenProvider;
     private final UserService userService;
 
     @PostMapping("/api/login")
     public ResponseEntity<CommonRes> login(@RequestBody UserReq userReq) {
-        return ResponseEntity.ok(CommonRes.successRes(userService.login(userReq)));
+        UserRes userRes = userService.login(userReq);
+        userRes.addToken(tokenProvider.createToken(userRes.getUserEmail()));
+        return ResponseEntity.ok(CommonRes.successRes(userRes));
     }
 
     @GetMapping("/api/users")

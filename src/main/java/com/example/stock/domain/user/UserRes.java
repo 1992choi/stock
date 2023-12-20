@@ -18,6 +18,8 @@ public class UserRes {
 
     private String userName;
 
+    private String token;
+
     private List<BookmarkRes> bookmarks = new ArrayList<>();
 
     public UserRes(User user) {
@@ -27,6 +29,10 @@ public class UserRes {
         this.bookmarks = user.getBookmarks().stream()
                 .map(BookmarkRes::new)
                 .collect(Collectors.toList());
+    }
+
+    public void addToken(String token) {
+        this.token = token;
     }
 
 }

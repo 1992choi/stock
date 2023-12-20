@@ -59,7 +59,8 @@
       if (response.data.status == 'success') {
         const user = {
           email: response.data.data.userEmail,
-          name: response.data.data.userName
+          name: response.data.data.userName,
+          token: response.data.data.token,
         }
         authStore.setUser(user);
         router.push('/main');
