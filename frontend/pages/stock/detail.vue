@@ -8,21 +8,18 @@
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label" for="basic-default-name">공모주</label>
           <div class="col-sm-10">
-            <!--                      <input type="text" class="form-control" v-model="stockName"/>-->
             <input type="text" class="form-control" v-model="stock.stockName"/>
           </div>
         </div>
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label" for="basic-default-name">공모일</label>
           <div class="col-sm-10">
-            <!--                      <input type="text" class="form-control" v-model="subscriptDate"/>-->
             <input type="text" class="form-control" v-model="stock.subscriptDate"/>
           </div>
         </div>
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label" for="basic-default-name">상장일</label>
           <div class="col-sm-10">
-            <!--                      <input type="text" class="form-control" v-model="listingDate"/>-->
             <input type="text" class="form-control" v-model="stock.listingDate"/>
           </div>
         </div>
@@ -40,37 +37,41 @@
 
 <script>
 import axios from "axios";
+import { useAuthStore } from '~/stores/auth'
 
+const store = useAuthStore();
+const { user } = store;
 const router = useRouter();
 
 export default {
   data() {
     return {
-      // stockId: '',
-      // stockName: '',
-      // subscriptDate: '',
-      // listingDate: ''
       stock: {}
     }
   },
   methods: {
     async getStock() {
       const stockId = this.$route.query.stockId;
-      const response = await axios.get('http://localhost:8080/api/stocks/' + stockId);
-      // this.stockName = response.data.stockName;
-      // this.subscriptDate = response.data.subscriptDate;
-      // this.listingDate = response.data.listingDate;
+      const response = await axios.get('http://localhost:8080/api/stocks/' + stockId,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            }
+          }
+      );
       this.stock = response.data.data;
     },
     async edit() {
       const stockId = this.$route.query.stockId;
       await axios.put('http://localhost:8080/api/stocks/' + stockId, {
-        // stockName: this.stockName,
-        // subscriptDate: this.subscriptDate,
-        // listingDate: this.listingDate
         stockName: this.stock.stockName,
         subscriptDate: this.stock.subscriptDate,
         listingDate: this.stock.listingDate
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
       }).then((response) => {
         if (response.status === 200) {
           if (response.data.status == 'success') {
@@ -87,7 +88,12 @@ export default {
     },
     async remove() {
       const stockId = this.$route.query.stockId;
-      await axios.delete('http://localhost:8080/api/stocks/' + stockId)
+      await axios.delete('http://localhost:8080/api/stocks/' + stockId,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          })
           .then((response) => {
             if (response.status === 200) {
               if (response.data.status == 'success') {

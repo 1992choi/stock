@@ -79,8 +79,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   head: {
     script: [
@@ -88,24 +86,10 @@ export default {
       { src: "../assets/vendor/js/bootstrap.js" },
       { src: "../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js" },
       { src: "../assets/vendor/js/menu.js" },
-      { src: ".../assets/vendor/libs/apex-charts/apexcharts.js" },
+      { src: "../assets/vendor/libs/apex-charts/apexcharts.js" },
       { src: "../assets/js/main.js" },
-      { src: ".../assets/js/dashboards-analytics.js" }
+      { src: "../assets/js/dashboards-analytics.js" }
     ]
-  },
-  data() {
-    return {
-      title: {},
-    }
-  },
-  methods: {
-    async getTitle() {
-      const response = await axios.get('http://localhost:8080/api/test/hello');
-      this.title = response.data;
-    }
-  },
-  created() {
-    this.getTitle();
-  },
+  }
 }
 </script>

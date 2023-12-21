@@ -5,6 +5,7 @@ import { useAuthStore } from '~/stores/auth'
 
 const store = useAuthStore();
 const { user } = store;
+
 function stockFn() {
 
     const stocks = ref('');

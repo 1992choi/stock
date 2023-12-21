@@ -37,7 +37,10 @@
 <script setup lang="ts">
 import {ref} from "@vue/reactivity";
 import axios from "axios";
+import { useAuthStore } from '~/stores/auth'
 
+const store = useAuthStore();
+const { user } = store;
 const stockName = ref('')
 const subscriptDate = ref('')
 const listingDate = ref('')
@@ -48,6 +51,11 @@ async function regist() {
     stockName: stockName.value,
     subscriptDate: subscriptDate.value,
     listingDate: listingDate.value
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${user.token}`
+    }
   }).then((response) => {
     if (response.data.status == 'success') {
       alert("추가 성공");

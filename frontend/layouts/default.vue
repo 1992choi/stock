@@ -13,7 +13,7 @@
             <li class="menu-item active">
               <a class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <nuxt-link to="/">Dashboard</nuxt-link>
+                <nuxt-link to="/main">Dashboard</nuxt-link>
               </a>
             </li>
 
@@ -90,7 +90,7 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="auth-login-basic.html">
+                      <a class="dropdown-item">
                         <i class="bx bx-power-off me-2"></i>
                         <span class="align-middle">Log Out</span>
                       </a>
