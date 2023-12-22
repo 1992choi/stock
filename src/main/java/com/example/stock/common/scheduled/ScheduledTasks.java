@@ -4,6 +4,7 @@ import com.example.stock.domain.stock.BookmarkRes;
 import com.example.stock.domain.stock.Stock;
 import com.example.stock.domain.user.UserRes;
 import com.example.stock.repository.stock.StockRepository;
+import com.example.stock.service.noti.SlackService;
 import com.example.stock.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +22,7 @@ public class ScheduledTasks {
 
     private final UserService userService;
     private final StockRepository stockRepository;
+    private final SlackService slackService;
 
     @Scheduled(cron = "0 0 1 * * *")
     public void deleteStock() {
@@ -38,10 +41,15 @@ public class ScheduledTasks {
         LocalDate today = LocalDate.now();
         List<UserRes> users = userService.findUsers();
         for (UserRes userRes : users) {
+            String title = userRes.getUserName() + "님 공모주 알림입니다.";
+            List<String> stocks = new ArrayList<>();
             for (BookmarkRes bookmarkRes : userRes.getBookmarks()) {
                 if (today.isEqual(bookmarkRes.getStock().getSubscriptDate())) {
-                    log.info("{}님에게 {} 공모주 알림", userRes.getUserName(), bookmarkRes.getStock().getStockName());
+                    stocks.add(bookmarkRes.getStock().getStockName());
                 }
+            }
+            if (stocks.size() != 0) {
+                slackService.sendMessage(title, stocks);
             }
         }
     }
@@ -51,10 +59,15 @@ public class ScheduledTasks {
         LocalDate today = LocalDate.now();
         List<UserRes> users = userService.findUsers();
         for (UserRes userRes : users) {
+            String title = userRes.getUserName() + "님 상장일 알림입니다.";
+            List<String> stocks = new ArrayList<>();
             for (BookmarkRes bookmarkRes : userRes.getBookmarks()) {
                 if (today.isEqual(bookmarkRes.getStock().getListingDate()) && "Y".equals(bookmarkRes.getIssuedFlag())) {
-                    log.info("{}님에게 {} 상장 알림", userRes.getUserName(), bookmarkRes.getStock().getStockName());
+                    stocks.add(bookmarkRes.getStock().getStockName());
                 }
+            }
+            if (stocks.size() != 0) {
+                slackService.sendMessage(title, stocks);
             }
         }
     }
