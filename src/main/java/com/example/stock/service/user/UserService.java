@@ -1,11 +1,8 @@
 package com.example.stock.service.user;
 
-import com.example.stock.domain.stock.Bookmark;
-import com.example.stock.domain.stock.BookmarkRes;
 import com.example.stock.domain.user.User;
 import com.example.stock.domain.user.UserReq;
 import com.example.stock.domain.user.UserRes;
-import com.example.stock.repository.stock.BookmarkRepository;
 import com.example.stock.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,7 +23,6 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final BookmarkRepository bookmarkRepository;
 
     public UserRes login(UserReq userReq) {
         User user = userRepository.findByUserEmail(userReq.getUserEmail()).orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
@@ -52,14 +48,6 @@ public class UserService implements UserDetailsService {
         return new UserRes(userRepository.save(userReq.toEntity()));
     }
 
-    public List<BookmarkRes> findBookmarks(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
-        List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(user);
-
-        return bookmarks.stream()
-                .map(BookmarkRes::new)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
