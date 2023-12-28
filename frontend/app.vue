@@ -1,7 +1,18 @@
 <template>
-  <div>
+  <NuxtExampleLayout >
+    <NuxtLoadingIndicator />
     <NuxtLayout>
-      <NuxtPage />
+      <NuxtPage/>
     </NuxtLayout>
-  </div>
+  </NuxtExampleLayout>
 </template>
+
+<!--<template>-->
+<!--  <div>-->
+<!--    <NuxtLayout>-->
+<!--      <NuxtPage />-->
+<!--    </NuxtLayout>-->
+<!--  </div>-->
+<!--</template>-->
+<script setup lang="ts">
+</script>
