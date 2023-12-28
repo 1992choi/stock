@@ -1,75 +1,70 @@
+<script setup lang="ts">
+import {ref} from "@vue/reactivity";
+import axios from "axios";
+import { useAuthStore } from '~/stores/auth'
+
+definePageMeta({
+  layout: "blank",
+});
+
+const userEmail = ref('')
+const userPassword = ref('')
+const authStore = useAuthStore()
+const router = useRouter();
+
+async function login() {
+  await axios.post('http://localhost:8080/api/login', {
+    userEmail: userEmail.value,
+    userPassword: userPassword.value
+  }).then((response) => {
+    if (response.data.status == 'success') {
+      const user = {
+        email: response.data.data.userEmail,
+        name: response.data.data.userName,
+        token: response.data.data.token,
+      }
+      authStore.setUser(user);
+      router.push('/main');
+    } else {
+      alert(response.data.message);
+    }
+  }).catch((error) => {
+    console.log(error.response)
+    alert("로그인 실패");
+  });
+}
+</script>
+
 <template>
-  <div class="container-sm w-50 mt-5">
-    <div class="authentication-wrapper authentication-basic container-p-y">
-      <div class="authentication-inner">
-        <div class="card">
-          <div class="card-body">
-            <div class="app-brand justify-content-center">
-              <a class="app-brand-link gap-2">
-                <span class="demo text-body fw-bolder">Stock</span>
-              </a>
-            </div>
-            <form class="mb-3">
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="text" class="form-control" v-model="userEmail" />
+  <div class="authentication">
+    <v-container fluid class="pa-3">
+      <v-row class="h-100vh d-flex justify-center align-center">
+        <v-col cols="12" lg="4" xl="3" class="d-flex align-center">
+          <v-card rounded="md" elevation="10" class="px-sm-1 px-0 withbg mx-auto" max-width="500">
+            <v-card-item class="pa-sm-8">
+              <div class="d-flex justify-center py-4">
+                <LayoutFullLogo />
               </div>
-              <div class="mb-3 form-password-toggle">
-                <div class="d-flex justify-content-between">
-                  <label class="form-label" for="password">Password</label>
-                </div>
-                <div class="input-group input-group-merge">
-                  <input type="password" class="form-control" v-model="userPassword" />
-                  <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                </div>
-              </div>
-              <div class="mb-3">
-                <button class="btn btn-primary d-grid w-100" type="button" @click="login()">Sign in</button>
-              </div>
-            </form>
-            <p class="text-center">
-              <nuxt-link to="/signup">Sign up</nuxt-link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+                <v-row class="d-flex mb-3">
+                  <v-col cols="12">
+                    <v-label class="font-weight-bold mb-1">Email</v-label>
+                    <v-text-field variant="outlined" hide-details color="primary" v-model="userEmail"></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-label class="font-weight-bold mb-1">Password</v-label>
+                    <v-text-field variant="outlined" type="password"  hide-details color="primary" v-model="userPassword"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" class="pt-0">
+                    <v-btn color="primary" size="large" block flat @click="login()">Sign in</v-btn>
+                  </v-col>
+                </v-row>
+              <h6 class="text-h6 text-muted font-weight-medium d-flex justify-center align-center mt-3">
+                <NuxtLink to="/signup" class="text-primary text-decoration-none text-body-1 opacity-1 font-weight-medium pl-2">Create an account</NuxtLink>
+              </h6>
+            </v-card-item>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
-
-<script setup>
-  import {ref} from "@vue/reactivity";
-  import axios from "axios";
-  import { useAuthStore } from '~/stores/auth'
-
-  definePageMeta({
-    layout: false
-  });
-
-  const userEmail = ref('')
-  const userPassword = ref('')
-  const authStore = useAuthStore()
-  const router = useRouter();
-
-  async function login() {
-    await axios.post('http://localhost:8080/api/login', {
-      userEmail: userEmail.value,
-      userPassword: userPassword.value
-    }).then((response) => {
-      if (response.data.status == 'success') {
-        const user = {
-          email: response.data.data.userEmail,
-          name: response.data.data.userName,
-          token: response.data.data.token,
-        }
-        authStore.setUser(user);
-        router.push('/main');
-      } else {
-        alert(response.data.message);
-      }
-    }).catch((error) => {
-      console.log(error.response)
-      alert("로그인 실패");
-    });
-  }
-</script>

@@ -1,40 +1,3 @@
-<template>
-  <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4">공모주 상세</h4>
-
-    <!-- Basic Bootstrap Table -->
-    <div class="card-body">
-      <form>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label" for="basic-default-name">공모주</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" v-model="stock.stockName"/>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label" for="basic-default-name">공모일</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" v-model="stock.subscriptDate"/>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label" for="basic-default-name">상장일</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" v-model="stock.listingDate"/>
-          </div>
-        </div>
-        <div class="row justify-content-end text-end">
-          <div class="col-sm-10">
-            <button type="button" class="btn btn-primary" @click="edit()">수정</button>
-            <button type="button" class="btn btn-danger" @click="remove()">삭제</button>
-          </div>
-        </div>
-      </form>
-    </div>
-    <!--/ Basic Bootstrap Table -->
-  </div>
-</template>
-
 <script>
 import axios from "axios";
 import { useAuthStore } from '~/stores/auth'
@@ -64,15 +27,15 @@ export default {
     async edit() {
       const stockId = this.$route.query.stockId;
       await axios.put('http://localhost:8080/api/stocks/' + stockId, {
-        stockName: this.stock.stockName,
-        subscriptDate: this.stock.subscriptDate,
-        listingDate: this.stock.listingDate
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${user.token}`
-        }
-      }).then((response) => {
+            stockName: this.stock.stockName,
+            subscriptDate: this.stock.subscriptDate,
+            listingDate: this.stock.listingDate
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`
+            }
+          }).then((response) => {
         if (response.status === 200) {
           if (response.data.status == 'success') {
             alert("수정 성공");
@@ -114,3 +77,31 @@ export default {
   },
 }
 </script>
+
+<template>
+  <v-card elevation="10" class="">
+    <v-card-item class="pa-6">
+      <v-card-title class="text-h5 pt-sm-2 pb-7">공모주 상세</v-card-title>
+      <form>
+        <v-row class="d-flex mb-3">
+          <v-col cols="12">
+            <v-label class="font-weight-bold mb-1">공모주</v-label>
+            <v-text-field variant="outlined" hide-details color="primary" v-model="stock.stockName"></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-label class="font-weight-bold mb-1">공모일</v-label>
+            <v-text-field variant="outlined" type="text" hide-details color="primary" v-model="stock.subscriptDate"></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-label class="font-weight-bold mb-1">상장일</v-label>
+            <v-text-field variant="outlined" type="text" hide-details color="primary" v-model="stock.listingDate"></v-text-field>
+          </v-col>
+          <v-col cols="12 text-right">
+            <v-btn class="mr-2 bg-primary" @click="edit()">수정</v-btn>
+            <v-btn class="mr-2 bg-warning" @click="remove()">삭제</v-btn>
+          </v-col>
+        </v-row>
+      </form>
+    </v-card-item>
+  </v-card>
+</template>
