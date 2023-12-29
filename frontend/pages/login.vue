@@ -20,6 +20,7 @@ async function login() {
     if (response.data.status == 'success') {
       const user = {
         email: response.data.data.userEmail,
+        id: response.data.data.userId,
         name: response.data.data.userName,
         token: response.data.data.token,
       }

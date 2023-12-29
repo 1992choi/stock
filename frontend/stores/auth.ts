@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 interface IUser {
     email: string
+    id: string
     name: string
     token: string
 }
@@ -11,6 +12,7 @@ export const useAuthStore = defineStore('auth', {
         return {
             user: {
                 email: '',
+                id: '',
                 name: '',
                 token: ''
             } as IUser
@@ -19,6 +21,7 @@ export const useAuthStore = defineStore('auth', {
     persist: true,
     getters: {
         getEmail: (state): string => state.user.email,
+        getId: (state): string => state.user.id,
         getName: (state): string => state.user.name,
         getToken: (state): string => state.user.token
     },

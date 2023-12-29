@@ -32,6 +32,11 @@ const sidebarItem: menu[] = [
         icon: MoodHappyIcon,
         to: '/stock/list'
     },
+    {
+        title: 'Bookmark',
+        icon: MoodHappyIcon,
+        to: '/bookmark/list'
+    },
 ];
 
 export default sidebarItem;
