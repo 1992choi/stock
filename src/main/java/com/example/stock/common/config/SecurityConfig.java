@@ -37,7 +37,8 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/stocks"),
-                                new AntPathRequestMatcher("/api/stocks/**")
+                                new AntPathRequestMatcher("/api/stocks/**"),
+                                new AntPathRequestMatcher("/api/bookmarks/**")
                         ).hasAuthority("ADMIN").anyRequest().authenticated())
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 

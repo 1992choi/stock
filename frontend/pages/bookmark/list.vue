@@ -5,14 +5,15 @@ export default {
   setup(props, context) {
     const {
       bookmarks,
-      getBookmarks
+      getBookmarks,
+      deleteBookmark
     } = bookmarkFn();
 
     onMounted(() => {
       getBookmarks();
     })
 
-    return { bookmarks }
+    return { bookmarks, deleteBookmark }
   }
 }
 </script>
@@ -28,6 +29,7 @@ export default {
           <th class="text-subtitle-1 font-weight-bold">공모일</th>
           <th class="text-subtitle-1 font-weight-bold">상장일</th>
           <th class="text-subtitle-1 font-weight-bold">배정결과</th>
+          <th class="text-subtitle-1"></th>
         </tr>
         </thead>
         <tbody>
@@ -36,6 +38,9 @@ export default {
           <td>{{ bookmark.stock.subscriptDate }}</td>
           <td>{{ bookmark.stock.listingDate }}</td>
           <td>{{ bookmark.issuedFlag }}</td>
+          <td>
+            <v-btn class="mr-2 bg-warning" @click="deleteBookmark(bookmark.bookmarkId)">삭제</v-btn>
+          </td>
         </tr>
         </tbody>
       </v-table>
