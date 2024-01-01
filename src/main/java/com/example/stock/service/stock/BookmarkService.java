@@ -58,6 +58,12 @@ public class BookmarkService {
     }
 
     @Transactional
+    public void editBookmark(Long bookmarkId) {
+        Bookmark bookmark = bookmarkRepository.findById(bookmarkId).orElseThrow(() -> new NoSuchElementException("관심종목이 없습니다."));
+        bookmark.setIssued("Y");
+    }
+
+    @Transactional
     public void removeBookmark(Long bookmarkId) {
         Bookmark bookmark = bookmarkRepository.findById(bookmarkId).orElseThrow(() -> new NoSuchElementException("관심종목이 없습니다."));
         bookmarkRepository.deleteById(bookmarkId);

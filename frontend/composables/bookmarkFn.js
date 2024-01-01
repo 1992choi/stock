@@ -74,7 +74,26 @@ function bookmarkFn() {
         });
     }
 
-    return {bookmarks, unBookmarks, getBookmarks, getUnBookmarks, addBookmark, deleteBookmark}
+    async function editBookmark(id) {
+        await axios.put(`http://localhost:8080/api/bookmarks/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            }).then((response) => {
+            if (response.data.status == 'success') {
+                alert("배정상태 변경 성공");
+                router.push('/bookmark/list');
+            } else {
+                alert(response.data.message);
+            }
+        }).catch((error) => {
+            console.log(error.response)
+            alert("배정상태 변경 실패");
+        });
+    }
+
+    return {bookmarks, unBookmarks, getBookmarks, getUnBookmarks, addBookmark, deleteBookmark, editBookmark}
 }
 
 export { bookmarkFn }

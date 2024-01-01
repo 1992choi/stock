@@ -6,9 +6,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @ToString
+@DynamicUpdate
 @NoArgsConstructor
 @Entity(name = "TB_BOOKMARK")
 public class Bookmark {
@@ -34,6 +36,10 @@ public class Bookmark {
         this.user = user;
         this.stock = stock;
         this.issuedFlag = "N";
+    }
+
+    public void setIssued(String issuedFlag) {
+        this.issuedFlag = issuedFlag;
     }
 
 }

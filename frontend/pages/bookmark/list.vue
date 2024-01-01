@@ -9,7 +9,8 @@ export default {
       unBookmarks,
       getUnBookmarks,
       addBookmark,
-      deleteBookmark
+      deleteBookmark,
+      editBookmark
     } = bookmarkFn();
 
     onMounted(() => {
@@ -17,7 +18,7 @@ export default {
       getUnBookmarks();
     })
 
-    return { bookmarks, unBookmarks, addBookmark, deleteBookmark }
+    return { bookmarks, unBookmarks, addBookmark, deleteBookmark, editBookmark }
   }
 }
 </script>
@@ -44,6 +45,7 @@ export default {
           <td>{{ bookmark.issuedFlag }}</td>
           <td>
             <v-btn class="mr-2 bg-warning" @click="deleteBookmark(bookmark.bookmarkId)">삭제</v-btn>
+            <v-btn v-if="bookmark.issuedFlag == 'N'" class="mr-2 bg-primary" @click="editBookmark(bookmark.bookmarkId)">배정</v-btn>
           </td>
         </tr>
         </tbody>
