@@ -45,6 +45,11 @@ public class UserController {
         return ResponseEntity.ok(CommonRes.successRes(bookmarkService.findBookmarks(userId)));
     }
 
+    @PostMapping("/api/users/{userId}/stocks/{stockId}/bookmarks")
+    public ResponseEntity<CommonRes> saveBookmark(@PathVariable Long userId, @PathVariable Long stockId) {
+        return ResponseEntity.ok(CommonRes.successRes(bookmarkService.saveBookmark(userId, stockId)));
+    }
+
     @GetMapping("/api/users/{userId}/unbookmarks")
     public ResponseEntity<CommonRes> findUnBookmarks(@PathVariable Long userId) {
         return ResponseEntity.ok(CommonRes.successRes(bookmarkService.findUnBookmarks(userId)));

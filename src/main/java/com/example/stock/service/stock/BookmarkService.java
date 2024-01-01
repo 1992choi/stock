@@ -45,10 +45,22 @@ public class BookmarkService {
     }
 
     @Transactional
+    public BookmarkRes saveBookmark(Long userId, Long stockId) {
+        User users = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("사용자가 없습니다."));
+        Stock stock = stockRepository.findById(stockId).orElseThrow(() -> new NoSuchElementException("공모주가 없습니다."));
+
+        Bookmark bookmark = Bookmark.builder()
+                .stock(stock)
+                .user(users)
+                .build();
+
+        return new BookmarkRes(bookmarkRepository.save(bookmark));
+    }
+
+    @Transactional
     public void removeBookmark(Long bookmarkId) {
         Bookmark bookmark = bookmarkRepository.findById(bookmarkId).orElseThrow(() -> new NoSuchElementException("관심종목이 없습니다."));
         bookmarkRepository.deleteById(bookmarkId);
     }
-
 
 }

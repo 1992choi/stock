@@ -9,6 +9,7 @@ const { user } = store;
 function bookmarkFn() {
 
     const bookmarks = ref('');
+    const unBookmarks = ref('');
     const router = useRouter();
 
     function getBookmarks() {
@@ -21,6 +22,37 @@ function bookmarkFn() {
                 bookmarks.value = result.data.data;
             }
         );
+    }
+
+    function getUnBookmarks() {
+        axios.get(`http://localhost:8080/api/users/${user.id}/unbookmarks`,
+            {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            }).then((result) => {
+                unBookmarks.value = result.data.data;
+            }
+        );
+    }
+
+    async function addBookmark(id) {
+        await axios.post(`http://localhost:8080/api/users/${user.id}/stocks/${id}/bookmarks`,
+            {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            }).then((response) => {
+            if (response.data.status == 'success') {
+                alert("추가 성공");
+                router.push('/bookmark/list');
+            } else {
+                alert(response.data.message);
+            }
+        }).catch((error) => {
+            console.log(error.response)
+            alert("추가 실패");
+        });
     }
 
     async function deleteBookmark(id) {
@@ -42,7 +74,7 @@ function bookmarkFn() {
         });
     }
 
-    return {bookmarks, getBookmarks, deleteBookmark}
+    return {bookmarks, unBookmarks, getBookmarks, getUnBookmarks, addBookmark, deleteBookmark}
 }
 
 export { bookmarkFn }
