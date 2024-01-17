@@ -39,3 +39,9 @@
 ## 2. Swagger
 ### 2.1. URL
 - http://localhost:8080/swagger-ui/index.html
+
+## 3. Redocly
+### 3.1. 설치
+- https://github.com/Redocly/openapi-starter
+### 3.2. swagger.json to yaml
+- https://redocly.com/tools/json-to-json-schema/
