@@ -1,0 +1,148 @@
+package com.example.stock.service.noti;
+
+import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+@Slf4j
+@Service
+public class TelegramService {
+
+    private final String TELEGRAM_TOKEN = "-";
+    private final String TELEGRAM_CHAT_ID = "-";
+
+    /**
+     * 텔레그램 메시지 전송
+     */
+    public void sendMessage() throws IOException {
+        sendTelegramToSubscription();
+        sendTelegramToIPO();
+    }
+
+    /**
+     * 청약 알리미
+     */
+    private void sendTelegramToSubscription() throws IOException {
+        Document document = Jsoup.connect("http://www.38.co.kr/html/fund/index.htm?o=k").get();
+        Elements elements = document.select("table[summary='공모주 청약일정'] tr");
+
+        int ipoCount = 0;
+        // LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.of(2024, 07, 25);
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("[청약 알림]").append("\n\n");
+
+        for (Element trElement : elements) {
+            Elements tdElements = trElement.select("td");
+            // 헤더 제외
+            if (tdElements.size() != 7) {
+                continue;
+            }
+
+            if (today.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")).equals(tdElements.get(1).text().split("~")[0])) {
+                sb.append("[공모주] ").append(tdElements.get(0).text()).append("\n");
+                sb.append("[일정] ").append(tdElements.get(1).text()).append("\n");
+                sb.append("[희망공모가] ").append(tdElements.get(3).text()).append("\n");
+                sb.append("[주간사] ").append(tdElements.get(5).text()).append("\n");
+                sb.append("\n\n\n");
+                ipoCount++;
+            }
+        }
+
+        if (ipoCount == 0) {
+            sb.append("청약정보가 없습니다.");
+        }
+
+        BufferedReader in = null;
+        try {
+            URL obj = new URL("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendmessage?chat_id=" + TELEGRAM_CHAT_ID + "&text=" + URLEncoder.encode(sb.toString(), "UTF-8"));
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+            in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                log.info("line={}", line);
+            }
+        } catch (Exception e) {
+            log.error("sendTelegram Err", e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+    }
+
+    /**
+     * 상장 알리미
+     */
+    private void sendTelegramToIPO() throws IOException {
+        Document document = Jsoup.connect("https://www.38.co.kr/html/fund/index.htm?o=nw").get();
+        Elements elements = document.select("table[summary='신규상장종목'] tr");
+
+        int ipoCount = 0;
+        // LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.of(2024, 07, 25);
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("[상장 알림]").append("\n\n");
+
+        for (Element trElement : elements) {
+            Elements tdElements = trElement.select("td");
+            // 헤더 제외
+            if (tdElements.size() != 10) {
+                continue;
+            }
+
+            if (today.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")).equals(tdElements.get(1).text())) {
+                sb.append("[기업명] ").append(tdElements.get(0).text()).append("\n");
+                sb.append("[상장일] ").append(tdElements.get(1).text()).append("\n");
+                sb.append("\n\n\n");
+                ipoCount++;
+            }
+        }
+
+        if (ipoCount == 0) {
+            sb.append("상장정보가 없습니다.");
+        }
+
+        BufferedReader in = null;
+        try {
+            URL obj = new URL("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendmessage?chat_id=" + TELEGRAM_CHAT_ID + "&text=" + URLEncoder.encode(sb.toString(), "UTF-8"));
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+            in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                log.info("line={}", line);
+            }
+        } catch (Exception e) {
+            log.error("sendTelegram Err", e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+    }
+
+}

@@ -33,7 +33,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/login"),
                                 new AntPathRequestMatcher("/api/users/**"),
-                                new AntPathRequestMatcher("/h2-console/**")
+                                new AntPathRequestMatcher("/h2-console/**"),
+                                new AntPathRequestMatcher("/api/noti/**")
                         ).permitAll()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/stocks"),
