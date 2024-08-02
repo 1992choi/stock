@@ -39,8 +39,7 @@ public class TelegramService {
         Elements elements = document.select("table[summary='공모주 청약일정'] tr");
 
         int ipoCount = 0;
-        // LocalDate today = LocalDate.now();
-        LocalDate today = LocalDate.of(2024, 07, 25);
+        LocalDate today = LocalDate.now();
 
         StringBuffer sb = new StringBuffer();
         sb.append("[청약 알림]").append("\n\n");
@@ -52,7 +51,10 @@ public class TelegramService {
                 continue;
             }
 
-            if (today.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")).equals(tdElements.get(1).text().split("~")[0])) {
+            String[] period = tdElements.get(1).text().split("~");
+
+            if (today.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")).equals(period[0]) ||
+                    today.format(DateTimeFormatter.ofPattern("MM.dd")).equals(period[1])) {
                 sb.append("[공모주] ").append(tdElements.get(0).text()).append("\n");
                 sb.append("[일정] ").append(tdElements.get(1).text()).append("\n");
                 sb.append("[희망공모가] ").append(tdElements.get(3).text()).append("\n");
@@ -97,8 +99,7 @@ public class TelegramService {
         Elements elements = document.select("table[summary='신규상장종목'] tr");
 
         int ipoCount = 0;
-        // LocalDate today = LocalDate.now();
-        LocalDate today = LocalDate.of(2024, 07, 25);
+        LocalDate today = LocalDate.now();
 
         StringBuffer sb = new StringBuffer();
         sb.append("[상장 알림]").append("\n\n");
