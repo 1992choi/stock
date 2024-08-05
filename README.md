@@ -50,4 +50,4 @@
 ### 4.1. AWS로 JAR 업로드
 - scp -i [pem file] [upload file] [user id]@[ec2 public IP]:~/[transfer address]
 ### 4.2. JAR 시작
-- nohup java -jar stock-0.0.1-SNAPSHOT.jar & > /dev/null
+- nohup java -Duser.timezone="Asia/Seoul" -jar stock-0.0.1-SNAPSHOT.jar & > /dev/null
