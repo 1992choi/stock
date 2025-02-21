@@ -6,6 +6,7 @@ import com.example.stock.domain.user.UserRes;
 import com.example.stock.repository.stock.StockRepository;
 import com.example.stock.service.noti.SlackService;
 import com.example.stock.service.noti.TelegramService;
+import com.example.stock.service.stock.MarketService;
 import com.example.stock.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ScheduledTasks {
 
     private final UserService userService;
+    private final MarketService marketService;
     private final StockRepository stockRepository;
     private final SlackService slackService;
     private final TelegramService telegramService;
@@ -87,6 +89,11 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 0 15 * * *")
     public void alertSubscriptionClosingUsingTelegram() throws Exception {
         telegramService.sendMessage("Closing");
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    public void executeTrade() {
+        marketService.executeTrade();
     }
 
 }
