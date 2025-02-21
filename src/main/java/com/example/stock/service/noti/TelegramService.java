@@ -184,28 +184,26 @@ public class TelegramService {
             }
         }
 
-        if (isEmpty) {
-            sb.append("청약정보가 없습니다.");
-        }
-
-        BufferedReader in = null;
-        try {
-            URL obj = new URL("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendmessage?chat_id=" + TELEGRAM_CHAT_ID + "&text=" + URLEncoder.encode(sb.toString(), "UTF-8"));
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
-            in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-            String line;
-            while ((line = in.readLine()) != null) {
-                log.info("line={}", line);
-            }
-        } catch (Exception e) {
-            log.error("sendSubscriptionClosingUsingTelegram Err", e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (Exception e) {
-                    // ignore
+        if (!isEmpty) {
+            BufferedReader in = null;
+            try {
+                URL obj = new URL("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendmessage?chat_id=" + TELEGRAM_CHAT_ID + "&text=" + URLEncoder.encode(sb.toString(), "UTF-8"));
+                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                con.setRequestMethod("GET");
+                in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    log.info("line={}", line);
+                }
+            } catch (Exception e) {
+                log.error("sendSubscriptionClosingUsingTelegram Err", e);
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (Exception e) {
+                        // ignore
+                    }
                 }
             }
         }

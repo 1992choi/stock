@@ -74,12 +74,12 @@ public class ScheduledTasks {
         }
     }
 
-    @Scheduled(cron = "0 50 8 * * *")
+    @Scheduled(cron = "0 30 8 * * *")
     public void alertIpoUsingTelegram() throws Exception {
         telegramService.sendMessage("IPO");
     }
 
-    @Scheduled(cron = "0 0 10 * * *")
+    @Scheduled(cron = "0 30 8 * * *")
     public void alertSubscriptionUsingTelegram() throws Exception {
         telegramService.sendMessage("Subscription");
     }
