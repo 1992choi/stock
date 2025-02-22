@@ -1,7 +1,9 @@
 package com.example.stock.service.market;
 
 import com.example.stock.domain.market.MarketPrice;
+import com.example.stock.domain.market.TradeHistory;
 import com.example.stock.repository.market.MarketPriceRepository;
+import com.example.stock.repository.market.TradeHistoryRepository;
 import com.example.stock.service.noti.TelegramService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 
@@ -19,9 +22,13 @@ public class MarketService {
 
     private final Random random = new Random();
     private final MarketPriceRepository marketPriceRepository;
+    private final TradeHistoryRepository tradeHistoryRepository;
     private final TelegramService telegramService;
 
     public void executeTrade() {
+        // TODO: 일 매수 제약조건 추가.
+        log.info("trade count = {}", tradeHistoryRepository.countByMarketCodeAndTradeDate("BTC", LocalDate.now()));
+
         // Fetches the current market price and stores it in the database.
         saveMarketPrice(getMarketPrice());
 
@@ -30,7 +37,7 @@ public class MarketService {
 
         // Determines whether the conditions for buying are met.
         if (isBuyConditionMet(recentPrice)) {
-            buy();
+            buy(recentPrice.get(0));
             telegramService.sendExecutionCompleted(recentPrice);
         }
     }
@@ -66,8 +73,17 @@ public class MarketService {
         return true;
     }
 
-    public void buy() {
+    public void buy(MarketPrice recentMarketPrice) {
         // TODO: 매수
+
+        // Set trade history.
+        TradeHistory tradeHistory = TradeHistory.builder()
+                .tradeDate(LocalDate.now())
+                .marketCode(recentMarketPrice.getMarketCode())
+                .tradePrice(recentMarketPrice.getMarketPrice())
+                .build();
+
+        tradeHistoryRepository.save(tradeHistory);
     }
 
     // TODO: API를 통해 가격을 가져오게 되면 해당 함수 제거 필요
