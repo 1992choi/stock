@@ -6,7 +6,7 @@ import com.example.stock.domain.user.UserRes;
 import com.example.stock.repository.stock.StockRepository;
 import com.example.stock.service.noti.SlackService;
 import com.example.stock.service.noti.TelegramService;
-import com.example.stock.service.stock.MarketService;
+import com.example.stock.service.market.MarketService;
 import com.example.stock.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
