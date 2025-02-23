@@ -263,4 +263,38 @@ public class TelegramService {
         }
     }
 
+    /**
+     * 체결 알리미
+     */
+    public void sendExecutionSellCompleted(BigDecimal currentPrice, BigDecimal boughtPrice) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("[체결 알림]").append("\n\n");
+        sb.append("구매가: ").append(decimalFormat.format(currentPrice)).append("\n");
+        sb.append("현재가: ").append(decimalFormat.format(boughtPrice));
+
+        BufferedReader in = null;
+        try {
+            URL obj = new URL("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendmessage?chat_id=" + TELEGRAM_CHAT_ID + "&text=" + URLEncoder.encode(sb.toString(), "UTF-8"));
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+            in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                log.info("line={}", line);
+            }
+        } catch (Exception e) {
+            log.error("sendExecutionCompleted Err", e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+    }
+
 }

@@ -92,8 +92,13 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 * * * * *")
-    public void executeTrade() {
-        marketService.executeTrade();
+    public void executeBuy() {
+        marketService.executeBuy();
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    public void executeSell() {
+        marketService.executeSell();
     }
 
 }

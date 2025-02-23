@@ -29,17 +29,19 @@ public class MarketService {
     private final TradeHistoryRepository tradeHistoryRepository;
     private final TelegramService telegramService;
 
-    public void executeTrade() {
-        // TODO: 일 매수 제약조건 추가.
-        log.info("trade count = {}", tradeHistoryRepository.countByMarketCodeAndTradeDate("BTC", LocalDate.now()));
+    public void executeBuy() {
+        if (tradeHistoryRepository.countByMarketCodeAndTradeDate("BTC", LocalDate.now()) > 5) {
+            // TODO: 실제 주문연동 후에는 일 매수 제한 활성화
+            // return;
+        }
 
         // Fetches the current market price and stores it in the database.
-        List<MarketPrice> marketPrices = getMarketPrice();
-        if (marketPrices == null) {
+        MarketPrice marketPrice = getMarketPrice();
+        if (marketPrice == null) {
             return;
         }
 
-        saveMarketPrice(marketPrices);
+        saveMarketPrice(marketPrice);
 
         // Get recent price
         List<MarketPrice> recentPrice = getRecentPrices("BTC");
@@ -51,8 +53,16 @@ public class MarketService {
         }
     }
 
-    public List<MarketPrice> getMarketPrice() {
-        // TODO: API를 통해서 가져오도록 변경.
+    public void executeSell() {
+        MarketPrice marketPrice = getMarketPrice();
+        if (marketPrice == null) {
+            return;
+        }
+
+        sell(marketPrice);
+    }
+
+    private MarketPrice getMarketPrice() {
         BufferedReader in = null;
         try {
             URL obj = new URL("https://api.coinone.co.kr/public/v2/trades/KRW/BTC?size=100");
@@ -68,7 +78,10 @@ public class MarketService {
                     .reduce(BigDecimal.ZERO, BigDecimal::add)
                     .divide(new BigDecimal(marketPriceResponse.getTransactions().size()), BigDecimal.ROUND_HALF_UP);
 
-            return List.of(MarketPrice.builder().marketCode("BTC").marketPrice(averagePrice).build());
+            return MarketPrice.builder()
+                    .marketCode("BTC")
+                    .marketPrice(averagePrice)
+                    .build();
         } catch (Exception e) {
             log.error("getMarketPrice Err", e);
         } finally {
@@ -84,15 +97,15 @@ public class MarketService {
         return null;
     }
 
-    public void saveMarketPrice(List<MarketPrice> marketPrices) {
-        marketPriceRepository.saveAll(marketPrices);
+    private void saveMarketPrice(MarketPrice marketPrice) {
+        marketPriceRepository.save(marketPrice);
     }
 
-    public List<MarketPrice> getRecentPrices(String marketCode) {
+    private List<MarketPrice> getRecentPrices(String marketCode) {
         return marketPriceRepository.findTop3ByMarketCodeOrderByCreatedAtDesc(marketCode);
     }
 
-    public boolean isBuyConditionMet(List<MarketPrice> recentPrices) {
+    private boolean isBuyConditionMet(List<MarketPrice> recentPrices) {
         for (int i = 0; i < recentPrices.size() - 1; i++) {
             if (recentPrices.get(i).getMarketPrice().compareTo(recentPrices.get(i + 1).getMarketPrice()) <= 0) {
                 return false;
@@ -102,7 +115,7 @@ public class MarketService {
         return true;
     }
 
-    public void buy(MarketPrice recentMarketPrice) {
+    private void buy(MarketPrice recentMarketPrice) {
         // TODO: 매수
 
         // Set trade history.
@@ -113,6 +126,18 @@ public class MarketService {
                 .build();
 
         tradeHistoryRepository.save(tradeHistory);
+    }
+
+    private void sell(MarketPrice marketPrice) {
+        BigDecimal currentPrice = marketPrice.getMarketPrice();
+
+        // TODO: 내 지갑에서 가져오도록 변경 필요.
+        TradeHistory tradeHistory = tradeHistoryRepository.findTopByMarketCodeOrderByCreatedAtDesc("BTC");
+        BigDecimal boughtPrice = tradeHistory.getTradePrice();
+
+        if (currentPrice.compareTo(boughtPrice.multiply(BigDecimal.valueOf(1.012))) > 0) {
+            telegramService.sendExecutionSellCompleted(currentPrice, boughtPrice);
+        }
     }
 
 }
