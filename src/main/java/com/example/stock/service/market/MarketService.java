@@ -1,26 +1,30 @@
 package com.example.stock.service.market;
 
 import com.example.stock.domain.market.MarketPrice;
+import com.example.stock.domain.market.MarketPriceResponse;
 import com.example.stock.domain.market.TradeHistory;
 import com.example.stock.repository.market.MarketPriceRepository;
 import com.example.stock.repository.market.TradeHistoryRepository;
 import com.example.stock.service.noti.TelegramService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Random;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MarketService {
 
-    private final Random random = new Random();
     private final MarketPriceRepository marketPriceRepository;
     private final TradeHistoryRepository tradeHistoryRepository;
     private final TelegramService telegramService;
@@ -30,7 +34,12 @@ public class MarketService {
         log.info("trade count = {}", tradeHistoryRepository.countByMarketCodeAndTradeDate("BTC", LocalDate.now()));
 
         // Fetches the current market price and stores it in the database.
-        saveMarketPrice(getMarketPrice());
+        List<MarketPrice> marketPrices = getMarketPrice();
+        if (marketPrices == null) {
+            return;
+        }
+
+        saveMarketPrice(marketPrices);
 
         // Get recent price
         List<MarketPrice> recentPrice = getRecentPrices("BTC");
@@ -44,15 +53,35 @@ public class MarketService {
 
     public List<MarketPrice> getMarketPrice() {
         // TODO: API를 통해서 가져오도록 변경.
-        BigDecimal price1 = getRandomDecimal(1000, 1100);
-        BigDecimal price2 = getRandomDecimal(100, 110);
-        BigDecimal price3 = getRandomDecimal(100, 110);
+        BufferedReader in = null;
+        try {
+            URL obj = new URL("https://api.coinone.co.kr/public/v2/trades/KRW/BTC?size=100");
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+            in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+            String resultString = in.readLine();
+            ObjectMapper objectMapper = new ObjectMapper();
+            MarketPriceResponse marketPriceResponse = objectMapper.readValue(resultString, MarketPriceResponse.class);
 
-        return List.of(
-                MarketPrice.builder().marketCode("BTC").marketPrice(price1).build(),
-                MarketPrice.builder().marketCode("ETH").marketPrice(price2).build(),
-                MarketPrice.builder().marketCode("XRP").marketPrice(price3).build()
-        );
+            BigDecimal averagePrice = marketPriceResponse.getTransactions().stream()
+                    .map(transaction -> new BigDecimal(transaction.getPrice()))
+                    .reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .divide(new BigDecimal(marketPriceResponse.getTransactions().size()), BigDecimal.ROUND_HALF_UP);
+
+            return List.of(MarketPrice.builder().marketCode("BTC").marketPrice(averagePrice).build());
+        } catch (Exception e) {
+            log.error("getMarketPrice Err", e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+
+        return null;
     }
 
     public void saveMarketPrice(List<MarketPrice> marketPrices) {
@@ -84,12 +113,6 @@ public class MarketService {
                 .build();
 
         tradeHistoryRepository.save(tradeHistory);
-    }
-
-    // TODO: API를 통해 가격을 가져오게 되면 해당 함수 제거 필요
-    private BigDecimal getRandomDecimal(double min, double max) {
-        double randomValue = min + (max - min) * random.nextDouble();
-        return BigDecimal.valueOf(randomValue).setScale(2, RoundingMode.HALF_UP);
     }
 
 }

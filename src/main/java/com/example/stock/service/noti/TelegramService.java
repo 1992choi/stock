@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -217,11 +220,25 @@ public class TelegramService {
      * 체결 알리미
      */
     public void sendExecutionCompleted(List<MarketPrice> recentPrice) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+
         recentPrice.sort(Comparator.comparing(MarketPrice::getMarketPrice));
 
+        // Set price info.
         StringBuffer sb = new StringBuffer();
         sb.append("[체결 알림]").append("\n\n");
-        sb.append(recentPrice.stream().map(marketPrice -> marketPrice.getMarketPrice().toString()).collect(Collectors.joining("  >  ")));
+        sb.append("금액 변동: ").append(recentPrice.stream().map(marketPrice -> decimalFormat.format(marketPrice.getMarketPrice())).collect(Collectors.joining("  >  ")));
+
+        // Set price change percentage.
+        BigDecimal lastPrice = recentPrice.get(recentPrice.size() - 1).getMarketPrice();
+        BigDecimal prevLastPrice = recentPrice.get(recentPrice.size() - 2).getMarketPrice();
+
+        BigDecimal percentChange = lastPrice.subtract(prevLastPrice)
+                .divide(prevLastPrice, 10, RoundingMode.HALF_EVEN) // 10자리까지 유지
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(4, RoundingMode.HALF_UP);
+
+        sb.append("\n등락율: ").append(percentChange).append("%");
 
         BufferedReader in = null;
         try {
