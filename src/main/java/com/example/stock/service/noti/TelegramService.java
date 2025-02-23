@@ -67,7 +67,7 @@ public class TelegramService {
             }
 
             if (today.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")).equals(tdElements.get(1).text())) {
-                sb.append("[기업명] ").append(tdElements.get(0).text()).append("\n");
+                sb.append("[기업명] ").append(tdElements.getFirst().text()).append("\n");
                 sb.append("[상장일] ").append(tdElements.get(1).text()).append("\n");
                 sb.append("\n\n\n");
                 isEmpty = false;
@@ -124,7 +124,7 @@ public class TelegramService {
 
             if (today.format(DateTimeFormatter.ofPattern("yyyy.MM.dd")).equals(period[0]) ||
                     today.format(DateTimeFormatter.ofPattern("MM.dd")).equals(period[1])) {
-                sb.append("[공모주] ").append(tdElements.get(0).text()).append("\n");
+                sb.append("[공모주] ").append(tdElements.getFirst().text()).append("\n");
                 sb.append("[일정] ").append(tdElements.get(1).text()).append("\n");
                 sb.append("[희망공모가] ").append(tdElements.get(3).text()).append("\n");
                 sb.append("[주간사] ").append(tdElements.get(5).text()).append("\n");
@@ -182,7 +182,7 @@ public class TelegramService {
             String[] period = tdElements.get(1).text().split("~");
 
             if (today.format(DateTimeFormatter.ofPattern("MM.dd")).equals(period[1])) {
-                sb.append("[공모주] ").append(tdElements.get(0).text()).append("\n");
+                sb.append("[공모주] ").append(tdElements.getFirst().text()).append("\n");
                 sb.append("[일정] ").append(tdElements.get(1).text()).append("\n");
                 sb.append("[희망공모가] ").append(tdElements.get(3).text()).append("\n");
                 sb.append("[주간사] ").append(tdElements.get(5).text()).append("\n");

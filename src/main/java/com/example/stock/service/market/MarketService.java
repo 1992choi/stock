@@ -46,7 +46,7 @@ public class MarketService {
 
         // Determines whether the conditions for buying are met.
         if (isBuyConditionMet(recentPrice)) {
-            buy(recentPrice.get(0));
+            buy(recentPrice.getFirst());
             telegramService.sendExecutionCompleted(recentPrice);
         }
     }
