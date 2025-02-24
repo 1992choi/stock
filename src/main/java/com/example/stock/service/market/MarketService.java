@@ -30,9 +30,8 @@ public class MarketService {
     private final TelegramService telegramService;
 
     public void executeBuy() {
-        if (tradeHistoryRepository.countByMarketCodeAndTradeDate("BTC", LocalDate.now()) > 5) {
-            // TODO: 실제 주문연동 후에는 일 매수 제한 활성화
-            // return;
+        if (tradeHistoryRepository.countByMarketCodeAndTradeDate("BTC", LocalDate.now()) > 0) {
+            return;
         }
 
         // Fetches the current market price and stores it in the database.
@@ -132,10 +131,13 @@ public class MarketService {
         BigDecimal currentPrice = marketPrice.getMarketPrice();
 
         // TODO: 내 지갑에서 가져오도록 변경 필요.
-        TradeHistory tradeHistory = tradeHistoryRepository.findTopByMarketCodeOrderByCreatedAtDesc("BTC");
+        TradeHistory tradeHistory = tradeHistoryRepository.findTopByMarketCodeAndTradeDateOrderByCreatedAtAsc("BTC", LocalDate.now());
         BigDecimal boughtPrice = tradeHistory.getTradePrice();
 
-        if (currentPrice.compareTo(boughtPrice.multiply(BigDecimal.valueOf(1.012))) > 0) {
+        if (currentPrice.compareTo(boughtPrice.multiply(BigDecimal.valueOf(1.012))) > 0 ||
+                currentPrice.compareTo(boughtPrice.multiply(BigDecimal.valueOf(0.98))) < 0) {
+            // TODO: 매도
+
             telegramService.sendExecutionSellCompleted(currentPrice, boughtPrice);
         }
     }

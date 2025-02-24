@@ -9,6 +9,6 @@ public interface TradeHistoryRepository extends JpaRepository<TradeHistory, Long
 
     long countByMarketCodeAndTradeDate(String marketCode, LocalDate tradeDate);
 
-    TradeHistory findTopByMarketCodeOrderByCreatedAtDesc(String marketCode);
+    TradeHistory findTopByMarketCodeAndTradeDateOrderByCreatedAtAsc(String marketCode, LocalDate tradeDate);
 
 }
