@@ -132,6 +132,10 @@ public class MarketService {
 
         // TODO: 내 지갑에서 가져오도록 변경 필요.
         TradeHistory tradeHistory = tradeHistoryRepository.findTopByMarketCodeAndTradeDateOrderByCreatedAtAsc("BTC", LocalDate.now());
+        if (tradeHistory == null) {
+            return;
+        }
+
         BigDecimal boughtPrice = tradeHistory.getTradePrice();
 
         if (currentPrice.compareTo(boughtPrice.multiply(BigDecimal.valueOf(1.012))) > 0 ||
